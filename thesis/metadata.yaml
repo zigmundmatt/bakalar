@@ -1,0 +1,50 @@
+# Thesis metadata: title page, bibliographic record, abstract.
+# Values in Markdown are allowed (e.g. *italics*). Keep the abstract at
+# 80–100 words per language (FMT template); both language versions together
+# must fit on one page.
+title: "Vizualizace částicové dynamiky v Hamakerově modelu interakce"
+title-en: "Visualization of Particle Dynamics in the Hamaker Interaction Model"
+author: "TODO Jméno Příjmení"
+supervisor: "TODO Jméno Příjmení, tituly"
+program: "TODO označení a název studijního programu"
+academic-year: "2026/2027"
+place: "Ostrava"
+date: "TODO datum odevzdání"
+# Unsigned assignment exported from IS EDISON. Uncomment when available:
+# assignment: thesis/zadani.pdf
+
+acknowledgements: |
+  TODO Poděkování (nepovinné). U osob uvádějte plná jména včetně titulů;
+  nesmí mezi nimi být oponent práce.
+
+abstract: |
+  TODO Abstrakt (80–100 slov): řešená problematika, cíl práce, použitý postup
+  a hlavní výsledky.
+keywords:
+  - TODO
+  - klíčová slova (4–5)
+
+abstract-en: |
+  TODO Abstract (80–100 words).
+keywords-en:
+  - TODO
+  - keywords (4–5)
+
+# List of abbreviations and symbols (FMT: only those whose meaning is not
+# generally known; physical quantities need a unit).
+symbols:
+  - symbol: "$A$"
+    unit: "J"
+    description: "Hamakerova konstanta"
+  - symbol: "$d$"
+    unit: "m"
+    description: "vzdálenost povrchů dvou částic"
+  - symbol: "$R$"
+    unit: "m"
+    description: "poloměr částice"
+  - symbol: "$U$"
+    unit: "J"
+    description: "potenciální energie interakce"
+  - symbol: "FMT"
+    unit: "–"
+    description: "Fakulta materiálově-technologická"

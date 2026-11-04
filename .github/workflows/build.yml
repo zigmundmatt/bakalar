@@ -1,0 +1,39 @@
+name: build-thesis
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pdf:
+    runs-on: ubuntu-latest
+    container: texlive/texlive:TL2025-historic
+    env:
+      PANDOC_VERSION: "3.12.1"
+      CROSSREF_VERSION: "v0.3.26"
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install pandoc, pandoc-crossref, poppler, python
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq poppler-utils python3 curl xz-utils >/dev/null
+          curl -sSL -o /tmp/pandoc.deb \
+            "https://github.com/jgm/pandoc/releases/download/${PANDOC_VERSION}/pandoc-${PANDOC_VERSION}-1-amd64.deb"
+          dpkg -i /tmp/pandoc.deb
+          curl -sSL "https://github.com/lierdakil/pandoc-crossref/releases/download/${CROSSREF_VERSION}/pandoc-crossref-Linux-X64.tar.xz" \
+            | tar -xJ -C /usr/local/bin pandoc-crossref
+          pandoc --version | head -1
+          pandoc-crossref --version
+
+      - name: Check citations (warnings while drafting)
+        run: python3 tools/check.py
+
+      - name: Build PDF
+        run: make pdf
+
+      - name: Upload PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: prace-pdf
+          path: build/prace.pdf
