@@ -14,9 +14,10 @@ Text se píše v Markdownu (`thesis/`) a sestavuje se do PDF/A ve vzhledu povinn
 make pdf      # build/prace.pdf
 make check    # kontrola citací a formálních požadavků (během psaní jen upozorňuje)
 make final    # před odevzdáním: PDF + přísná kontrola
+make pdfa     # validace PDF/A-2b nástrojem veraPDF (potřebuje Docker)
 ```
 
-GitHub Actions sestaví PDF při každém push a pull requestu. Najdeš ho v záložce **Actions** → poslední běh → **Artifacts** → `prace-pdf`.
+GitHub Actions sestaví PDF při každém push a pull requestu. Najdeš ho v záložce **Actions** → poslední běh → **Artifacts** → `prace-pdf`. Druhý krok ověří PDF/A nástrojem veraPDF, takže lokálně ho instalovat nemusíš.
 
 ### Lokální instalace
 

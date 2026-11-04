@@ -17,7 +17,7 @@ DEPS     := $(CHAPTERS) thesis/metadata.yaml thesis/references.bib \
             $(wildcard thesis/figures/*) $(wildcard tools/latex/*) \
             $(wildcard tools/pandoc/*) tools/csl/iso690-numeric-brackets-cs.csl
 
-.PHONY: pdf tex check final clean
+.PHONY: pdf tex check final pdfa clean
 
 pdf: $(PDF)
 
@@ -39,6 +39,11 @@ check:
 
 final: pdf
 	python3 tools/check.py --final --pdf $(PDF)
+
+# PDF/A-2b validation with veraPDF (needs Docker; CI runs it on every push)
+pdfa: pdf
+	docker run --rm -v "$(CURDIR)/build:/data" verapdf/cli:v1.30.2 \
+	  --flavour 2b --format text --verbose /data/prace.pdf
 
 clean:
 	rm -rf $(BUILD)

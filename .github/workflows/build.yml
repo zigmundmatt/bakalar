@@ -37,3 +37,19 @@ jobs:
         with:
           name: prace-pdf
           path: build/prace.pdf
+
+  pdfa:
+    # FMT requires PDF/A; veraPDF is the reference validator.
+    needs: pdf
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: prace-pdf
+          path: build
+
+      - name: Validate PDF/A-2b (veraPDF)
+        run: |
+          docker run --rm -v "$PWD/build:/data" verapdf/cli:v1.30.2 \
+            --flavour 2b --format text --verbose /data/prace.pdf | tee verapdf.txt
+          grep -q '^PASS' verapdf.txt

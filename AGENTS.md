@@ -18,7 +18,17 @@ Vedoucí práci pojímá jako ukázku toho, že **dobře řízený AI agent je i
 | `tools/` | Sestavení PDF (LaTeX replika šablony, Pandoc filtry, CSL styl) a kontroly. Uprav jen na výslovný požadavek. |
 | `app/` | Prototyp (praktická část, zatím prázdné). |
 
-Příkazy jsou v `Makefile` (`make pdf`, `make check`, `make final`).
+Příkazy jsou v `Makefile` (`make pdf`, `make check`, `make final`, `make pdfa`).
+
+## Když student začíná
+
+Když se student ptá, jak se v repu vyznat nebo čím začít, proveď ho těmito kroky. Další krok nabídni až po dokončení předchozího.
+
+1. Vysvětli strukturu repa a smysl práce z tohoto souboru, z `docs/osnova.md` a z `notes/rozhodnuti.md` (proč je osnova takhle). Hotovo, když student ví, kde co najde a co se od kapitol 1–4 čeká.
+2. Instalace nástrojů podle `README.md`. Hotovo, když `make pdf` vytvoří `build/prace.pdf`.
+3. Doplnění `thesis/metadata.yaml` (jméno, studijní program, datum) a zadání z EDISONu jako `thesis/zadani.pdf` (odkomentovat `assignment`).
+4. První psaní: podkapitola 2.4 nebo 2.5 (periodický box, časová integrace). Mají jasné hranice a zdroje jsou v `literature/`. Postupuj podle další sekce.
+5. Na konci sezení záznam do `notes/ai-log.md`.
 
 ## Postup při psaní kapitoly
 
