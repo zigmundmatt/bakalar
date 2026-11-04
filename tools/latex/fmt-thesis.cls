@@ -36,6 +36,7 @@
 \RequirePackage{tabularx}
 \RequirePackage{longtable}
 \RequirePackage{booktabs}
+\newcounter{none} % longtable counter for unnumbered tables
 \RequirePackage{enumitem}
 \RequirePackage{lastpage}
 \RequirePackage{etoolbox}
@@ -151,7 +152,7 @@
 \newcommand\fmt@inlineheading[1]{%
   \par\addvspace{6.5mm}%
   {\noindent\fontsize{16}{19.5}\selectfont\bfseries\color{fmtteal}#1\par}%
-  \vspace{5.4pt}}
+  \vspace{13.68pt}}
 
 % ---------------------------------------------------------------------------
 % Page styles: VSB-FMT logo in the header (all pages except the title page
@@ -186,9 +187,11 @@
 % figure, table captions above the table.
 % ---------------------------------------------------------------------------
 \DeclareCaptionFont{fmtcaption}{\fontsize{11}{13.4}\selectfont}
-\captionsetup{font={fmtcaption,it},labelfont={bf,it},labelsep=quad,
+% Label and text are separated by two spaces in the template (1.74 mm).
+\DeclareCaptionLabelSeparator{fmt}{\hspace{1.74mm}}
+\captionsetup{font={fmtcaption,it},labelfont={bf,it},labelsep=fmt,
   skip=6pt,singlelinecheck=false}
-\captionsetup[table]{justification=raggedright,position=above}
+\captionsetup[table]{justification=raggedright,position=above,skip=8.3pt}
 % With \DocumentMetadata the kernel (latex-lab) redefines \caption for floats
 % at the end of \begin{document}, so the caption package settings above only
 % reach longtable captions. Float captions get the same look here.
@@ -197,11 +200,35 @@
     \vskip6pt
     {\fontsize{11}{13.4}\selectfont\itshape
      \ifx\@captype\fmt@figuretype\centering\else\raggedright\fi
-     \textbf{#1}\quad#2\par}%
-    \vskip6pt}}
+     \textbf{#1}\hspace{1.74mm}#2\par}%
+    \vskip\fmt@captionafter}}
+% A figure caption is the last thing in its float, so the 6 pt after it and
+% \intextsep below the float would add up; the template has only the 6 pt.
+\newcommand\fmt@captionafter{%
+  \ifx\@captype\fmt@figuretype\dimexpr6pt-\intextsep-2.2pt\relax\else6pt\fi}
 \def\fmt@figuretype{figure}
 \setlength\intextsep{12pt}
 \setlength\textfloatsep{12pt}
+
+% ---------------------------------------------------------------------------
+% Tables: the template's "Mřížka tabulky" grid over the full text width,
+% outer border 1.5 pt, inner lines 0.75 pt, the header row closed by a
+% 1.5 pt line, Word's default cell margins 1.9 mm. tools/pandoc/fmt.lua
+% rewrites pandoc's booktabs longtables into this form.
+% ---------------------------------------------------------------------------
+\newlength\fmttableouterrule
+\setlength\fmttableouterrule{1.5pt}
+\newcommand\fmttablesetup{%
+  \setlength\arrayrulewidth{0.75pt}%
+  \setlength\tabcolsep{1.9mm}%
+  \renewcommand\arraystretch{0.92}%
+  \setlength\LTleft{0pt}\setlength\LTright{\fill}%
+  \setlength\LTcapwidth{\linewidth}%
+  \setlength\LTpre{\fmt@ltpre}\setlength\LTpost{\fmt@ltpost}}
+\newcommand\fmt@ltpre{12pt}
+\newcommand\fmt@ltpost{6.9pt}
+\def\fmttablethick{\noalign{\hrule height\fmttableouterrule}}
+\def\fmttablethin{\noalign{\hrule height\arrayrulewidth}}
 
 % ---------------------------------------------------------------------------
 % Table of contents: Calibri 11 pt, 7.53 mm pitch, dot leaders.
@@ -218,9 +245,9 @@
 \titlecontents{subsection}[29.6mm]{\fmt@tocfont}
   {\contentslabel{13.8mm}}{\hspace*{-13.8mm}}{\fmt@tocfill}[\vspace{5.33pt}]
 \titlecontents{figure}[8mm]{\fmt@tocfont}
-  {\textbf{\figurename~\thecontentslabel}\quad}{}{\fmt@tocfill}[\vspace{5.33pt}]
+  {\textbf{\figurename~\thecontentslabel}\hspace{1.74mm}}{}{\fmt@tocfill}[\vspace{5.33pt}]
 \titlecontents{table}[8mm]{\fmt@tocfont}
-  {\textbf{\tablename~\thecontentslabel}\quad}{}{\fmt@tocfill}[\vspace{5.33pt}]
+  {\textbf{\tablename~\thecontentslabel}\hspace{1.74mm}}{}{\fmt@tocfill}[\vspace{5.33pt}]
 \contentsmargin{0pt}
 
 % ---------------------------------------------------------------------------
@@ -394,6 +421,7 @@
 \newenvironment{fmtsymbols}
   {\chapter*{Seznam použitých zkratek a symbolů}%
    \noindent\setlength\tabcolsep{1.9mm}\renewcommand\arraystretch{0.95}%
+   \def\LTcaptype{none}% unnumbered: must not consume "Tab. 1"
    \begin{longtable}{|>{\raggedright\arraybackslash}p{32mm-2\tabcolsep-0.4pt}
      |>{\raggedright\arraybackslash}p{22.2mm-2\tabcolsep-0.4pt}
      |>{\raggedright\arraybackslash}p{105.8mm-2\tabcolsep-0.8pt}|}
@@ -437,18 +465,31 @@
   }
 \AtBeginDocument { \fmt_check_list:nN { lot } \c_true_bool \fmt_check_list:nN { lof } \c_true_bool }
 \ExplSyntaxOff
+% A hidden list still has to open its \jobname.lo? file for writing,
+% otherwise a clean build never records entries and never shows the list.
+\newcommand\fmt@hiddentoc[1]{\setbox\z@\vbox{\@starttoc{#1}}}
+% Every chapter writes \addvspace{10pt} into the lists; the template's lists
+% have no gaps between chapters.
+\newcommand\fmt@list[1]{\begingroup\let\addvspace\@gobble
+  \vspace*{\fmt@listshift}\@starttoc{#1}\endgroup}
+\newcommand\fmt@listshift{-1.45pt}
 \newcommand\fmtlists{%
   \iffmt@haslot
     \chapter*{\listtablename}%
-    \@starttoc{lot}%
+    \fmt@list{lot}%
     \iffmt@haslof
       \fmt@inlineheading{\listfigurename}%
-      \@starttoc{lof}%
+      \fmt@list{lof}%
+    \else
+      \fmt@hiddentoc{lof}%
     \fi
   \else
+    \fmt@hiddentoc{lot}%
     \iffmt@haslof
       \chapter*{\listfigurename}%
-      \@starttoc{lof}%
+      \fmt@list{lof}%
+    \else
+      \fmt@hiddentoc{lof}%
     \fi
   \fi}
 

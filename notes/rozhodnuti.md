@@ -14,7 +14,7 @@ Dohodnuto na úvodní konzultaci vedoucího s AI agentem (Claude Code). Výchoz�
 - Fonty Calibri a Cambria Math jsou v repu, aby výsledek odpovídal šabloně přesně.
 - Literatura (PDF) je commitovaná v repu, aby se citáty daly ověřit. Repo se případně přepne na soukromé.
 - Ověřitelnost: každá citace má lokátor a k němu doslovný citát v `literature/<klíč>.md`; `make check` citát hledá v PDF.
-- AI smí psát text i kód. Pravidla VŠB-TUO o AI jsou doporučení; agent na možný rozpor upozorní, ale neblokuje. Klíčová je transparentnost (`notes/ai-log.md`).
+- AI smí psát text i kód. Pravidla VŠB-TUO o AI jsou doporučení. Agent je nekomentuje, jen vede záznam v `notes/ai-log.md`; z něj může vzniknout kapitola o metodice práce s AI. Posouzení je na studentovi a vedoucím.
 - CI (GitHub Actions) sestaví PDF při každém push a PR.
 
 **Osnova (změny oproti první verzi studenta)**

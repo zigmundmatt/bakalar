@@ -22,8 +22,8 @@ GitHub Actions sestaví PDF při každém push a pull requestu. Najdeš ho v zá
 
 | Nástroj | Verze | Poznámka |
 |---|---|---|
-| [Pandoc](https://github.com/jgm/pandoc/releases) | 3.12.1 | |
-| [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref/releases) | 0.3.26 | musí být sestavený pro stejnou verzi Pandocu |
+| [Pandoc](https://github.com/jgm/pandoc/releases) | 3.11+ | ověřeno s 3.11 (Arch `pandoc-cli`) a 3.12.1 (CI) |
+| [pandoc-crossref](https://github.com/lierdakil/pandoc-crossref/releases) | 0.3.20+ | musí být sestavený pro stejnou verzi Pandocu (Arch `pandoc-crossref`) |
 | TeX Live | 2025+ | LuaLaTeX; na Arch Linuxu balíky `texlive-basic texlive-latex texlive-latexrecommended texlive-latexextra texlive-luatex texlive-fontsrecommended texlive-langczechslovak texlive-pictures` |
 | poppler-utils | | `pdftotext`, `pdfinfo` pro kontrolu citátů |
 | Python | 3.10+ | `tools/check.py`, jen standardní knihovna |

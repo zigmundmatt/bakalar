@@ -12,6 +12,11 @@
 --
 -- 2. Czech typography: a non-breaking space after one-letter prepositions and
 --    conjunctions (k, s, v, z, o, u, a, i), so they never end a line.
+--
+-- 3. Tables in the template's grid style. Columns without a width share the
+--    text width equally (as an inserted Word table does). Pandoc writes the
+--    table as a booktabs longtable; that code is rewritten to vertical rules
+--    and the fmttable* rules defined in fmt-thesis.cls.
 
 local one_letter = {
   k = true, s = true, v = true, z = true, o = true, u = true, a = true, i = true,
@@ -59,7 +64,61 @@ local function kde_block(div)
   return blocks
 end
 
+local function plain_replace(text, from, to)
+  return (text:gsub(from:gsub('%p', '%%%0'), (to:gsub('%%', '%%%%'))))
+end
+
+local function grid_table(tbl)
+  if not FORMAT:match('latex') then
+    return nil
+  end
+  local n = #tbl.colspecs
+  local all_default = true
+  for _, cs in ipairs(tbl.colspecs) do
+    if cs[2] ~= nil then all_default = false end
+  end
+  if all_default then
+    for i, cs in ipairs(tbl.colspecs) do
+      tbl.colspecs[i] = { cs[1], 1 / n }
+    end
+  end
+  -- body only: the writer options of this run would make it standalone
+  local tex = pandoc.write(pandoc.Pandoc({ tbl }), 'latex')
+
+  -- column spec: outer 1.5 pt rules, 0.75 pt rules between columns
+  local outer = '!{\\vrule width\\fmttableouterrule}'
+  tex = tex:gsub('(\\begin{longtable}%[%]){@{}(.-)@{}}', function(head, cols)
+    cols = cols:gsub('>{', '|>{')
+    cols = cols:gsub('^(%s*)|', '%1' .. outer, 1)
+    return head .. '{' .. cols .. outer .. '}'
+  end, 1)
+  -- widths: pandoc subtracts the inner column gaps only
+  tex = tex:gsub('%(\\linewidth %- %d+\\tabcolsep%)', string.format(
+    '(\\linewidth - %d\\tabcolsep - 2\\fmttableouterrule - %d\\arrayrulewidth)',
+    2 * n, n - 1))
+
+  for _, rule in ipairs({ 'toprule', 'midrule', 'bottomrule' }) do
+    tex = plain_replace(tex, '\\' .. rule .. '\\noalign{}', '\\fmttablethick')
+    tex = plain_replace(tex, '\\' .. rule, '\\fmttablethick')
+  end
+
+  -- thin rule between body rows (the last row is closed by the foot rule)
+  local foot = '\\endlastfoot\n'
+  local s, e = tex:find(foot, 1, true)
+  if e then
+    local body_end = tex:find('\\end{longtable}', e, true)
+    local body = tex:sub(e + 1, body_end - 1)
+    body = body:gsub(' \\\\\n', ' \\\\ \\fmttablethin\n')
+    body = body:gsub('(.*) \\fmttablethin\n', '%1\n')
+    tex = tex:sub(1, e) .. body .. tex:sub(body_end)
+  end
+
+  return pandoc.RawBlock('latex',
+    '\\begingroup\\fmttablesetup\n' .. tex .. '\n\\endgroup')
+end
+
 return {
   { Inlines = nbsp_inlines },
   { Div = kde_block },
+  { Table = grid_table },
 }

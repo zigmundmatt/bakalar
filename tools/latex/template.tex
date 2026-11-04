@@ -6,7 +6,6 @@
 
 % --- helpers that pandoc's LaTeX writer relies on ---------------------------
 \providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-\newcounter{none} % for unnumbered tables
 \makeatletter
 \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
 \newsavebox\pandoc@box

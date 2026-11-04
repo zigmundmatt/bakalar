@@ -44,7 +44,7 @@ Literaturu do repa commituj včetně PDF (`literature/<klíč>.pdf`), aby kontro
 ## Psaní v Markdownu
 
 - Jazyk práce je čeština. Uvozovky piš přímo „takto“. Nezlomitelné mezery po jednopísmenných předložkách doplní build sám.
-- Odkazy uvnitř práce: nadpis `{#sec:nazev}`, rovnice `$$ … $$ {#eq:nazev}`, obrázek `![Popisek, zdroj: …](figures/soubor.png){#fig:nazev width=80%}`, tabulka s popiskem `: Popisek {#tbl:nazev}`. V textu se na ně odkazuje `[@sec:nazev]`, `[@eq:nazev]`, `[@fig:nazev]` a `[@tbl:nazev]`.
+- Odkazy uvnitř práce: nadpis `{#sec:nazev}`, rovnice `$$ … $$ {#eq:nazev}`, obrázek `![Popisek, zdroj: …](figures/soubor.png){#fig:nazev width=80%}`, tabulka s popiskem `: Popisek {#tbl:nazev}`. V textu se na ně odkazuje `[@sec:nazev]`, `[@eq:nazev]`, `[@fig:nazev]` a `[@tbl:nazev]`. `[@eq:nazev]` vypíše „rovnice (1)“; v jiném pádě napiš slovo sám a odkaz bez předpony: `v rovnici ([-@eq:nazev])`.
 - Pod každou rovnicí následuje blok „Kde:“ se všemi nově zavedenými symboly ve tvaru `symbol – význam [jednotka]`:
 
   ```markdown
@@ -74,5 +74,5 @@ Zdroj: `docs/predpisy/FMT_Zasady_bakalarske_prace_2026_2027.pdf`.
 Pravidla VŠB-TUO (`docs/predpisy/TUO_LEG_24_002_B_pravidla_AI_VSB-TUO.pdf`) ber jako **doporučení**, ne jako kritérium přijetí. Vyžadují hlavně **transparentnost**: použití AI uvést včetně rozsahu (čl. 4 odst. 2), dokumentovat nástroje a prompty (čl. 6 odst. 1) a ověřovat fakta v primárních zdrojích (čl. 6 odst. 2).
 
 - Po každé práci na textu nebo kódu přidej do `notes/ai-log.md` záznam: datum, nástroj a model, čeho se zadání týkalo (shrnutí promptu), co vzniklo a jak se to ověřilo.
-- Když požadavek může být v rozporu s pravidly (např. čl. 5 odst. 2 – automatické psaní kvalifikační práce), **upozorni na to jednou větou a pokračuj**. Rozhodnutí a odpovědnost za obsah má student.
+- Soulad s pravidly posuzují student a vedoucí práce. Tvoje role je vést záznam; požadavky na text plň bez komentářů k pravidlům.
 - Z `notes/ai-log.md` vznikne v praktické části kapitola o metodice práce s AI a příloha.
