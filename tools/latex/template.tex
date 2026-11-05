@@ -1,0 +1,75 @@
+% Pandoc template for the FMT VSB-TUO bachelor thesis replica.
+% Do not edit by hand when writing the thesis; values come from
+% thesis/metadata.yaml and the Markdown chapters in thesis/.
+\DocumentMetadata{pdfstandard=a-2b, pdfversion=1.7, lang=cs-CZ}
+\documentclass{fmt-thesis}
+
+% --- helpers that pandoc's LaTeX writer relies on ---------------------------
+\providecommand{\tightlist}{\setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{%
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi}
+\def\fps@figure{htbp}
+% image paths in Markdown are relative to thesis/ (so they render on GitHub)
+\graphicspath{{thesis/}}
+% citeproc citations (pandoc): \citeproc{key}{rendered text}
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\let\@cite@ofmt\@firstofone
+\def\@biblabel#1{}
+\def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+$if(strikeout)$
+\usepackage{luacolor}
+\usepackage[soul]{lua-ul}
+$endif$
+$for(header-includes)$
+$header-includes$
+$endfor$
+
+% --- metadata ----------------------------------------------------------------
+$if(title)$\fmtsettitlecs{$title$}$endif$
+$if(title-en)$\fmtsettitleen{$title-en$}$endif$
+$if(author)$\fmtsetauthor{$for(author)$$author$$sep$, $endfor$}$endif$
+$if(supervisor)$\fmtsetsupervisor{$supervisor$}$endif$
+$if(program)$\fmtsetprogram{$program$}$endif$
+$if(academic-year)$\fmtsetacademicyear{$academic-year$}$endif$
+$if(place)$\fmtsetplace{$place$}$endif$
+$if(date)$\fmtsetdate{$date$}$endif$
+$if(page-count)$\fmtsetpagecount{$page-count$}$endif$
+$if(assignment)$\fmtsetassignment{$assignment$}$endif$
+$if(acknowledgements)$\fmtsetacknowledgements{$acknowledgements$}$endif$
+$if(abstract)$\fmtsetabstractcs{$abstract$}$endif$
+$if(keywords)$\fmtsetkeywordscs{$for(keywords)$$keywords$$sep$, $endfor$}$endif$
+$if(abstract-en)$\fmtsetabstracten{$abstract-en$}$endif$
+$if(keywords-en)$\fmtsetkeywordsen{$for(keywords-en)$$keywords-en$$sep$, $endfor$}$endif$
+
+\hypersetup{pdftitle={$title$},pdfauthor={$for(author)$$author$$sep$, $endfor$},
+  pdfsubject={Bakalářská práce, FMT VŠB-TUO}}
+
+\begin{document}
+\fmtfrontmatter
+$if(symbols)$
+\begin{fmtsymbols}
+$for(symbols)$
+$symbols.symbol$ & $symbols.unit$ & $symbols.description$ \\ \hline
+$endfor$
+\end{fmtsymbols}
+$endif$
+\fmtlists
+
+$body$
+
+\end{document}

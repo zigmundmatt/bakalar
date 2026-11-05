@@ -1,0 +1,22 @@
+# Pandoc defaults for the thesis PDF build (used by the Makefile).
+from: markdown+smart
+to: latex
+standalone: true
+template: tools/latex/template.tex
+metadata-files:
+  - thesis/metadata.yaml
+  - tools/pandoc/crossref.yaml
+resource-path:
+  - thesis
+  - .
+filters:
+  - pandoc-crossref
+  - citeproc
+  - tools/pandoc/fmt.lua
+bibliography: thesis/references.bib
+csl: tools/csl/iso690-numeric-brackets-cs.csl
+metadata:
+  link-citations: true
+variables:
+  lang: cs
+top-level-division: chapter

@@ -1,0 +1,12 @@
+# pandoc-crossref settings matching the FMT template:
+# captions "Obr. 1", "Tab. 1"; equations "(1)"; references in Czech text
+# such as "viz obr. 1", "tab. 2", "rovnice (3)".
+figureTitle: "Obr."
+tableTitle: "Tab."
+figPrefix: "obr."
+tblPrefix: "tab."
+eqnPrefix: "rovnice"
+secPrefix: "kap."
+eqnPrefixTemplate: "$$p$$ ($$i$$)"
+linkReferences: true
+nameInLink: false
